@@ -11,6 +11,7 @@ export * from './types'
 export { useQueries } from './useQueries'
 export type { QueriesResults, QueriesOptions } from './useQueries'
 export { useQuery } from './useQuery'
+export { useSuspenseQuery } from './useSuspenseQuery'
 export {
   defaultContext,
   QueryClientProvider,
@@ -29,3 +30,8 @@ export { useIsMutating } from './useIsMutating'
 export { useMutation } from './useMutation'
 export { useInfiniteQuery } from './useInfiniteQuery'
 export { useIsRestoring, IsRestoringProvider } from './isRestoring'
+export { queryOptions } from './queryOptions'
+export type {
+  DefinedInitialDataOptions,
+  UndefinedInitialDataOptions,
+} from './queryOptions'
