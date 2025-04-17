@@ -74,7 +74,7 @@ describe('useQuery', () => {
       // it should provide the result type in the configuration
       useQuery(() => ({
         queryKey: [key],
-        queryFn: async () => true,
+        queryFn: () => true,
       }))
 
       // it should be possible to specify a union type as result type
@@ -119,7 +119,7 @@ describe('useQuery', () => {
       type MyData = number
       type MyQueryKey = readonly ['my-data', number]
 
-      const getMyDataArrayKey: QueryFunction<MyData, MyQueryKey> = async ({
+      const getMyDataArrayKey: QueryFunction<MyData, MyQueryKey> = ({
         queryKey: [, n],
       }) => {
         return n + 42
@@ -130,9 +130,7 @@ describe('useQuery', () => {
         queryFn: getMyDataArrayKey,
       }))
 
-      const getMyDataStringKey: QueryFunction<MyData, ['1']> = async (
-        context,
-      ) => {
+      const getMyDataStringKey: QueryFunction<MyData, ['1']> = (context) => {
         expectTypeOf(context.queryKey).toEqualTypeOf<['1']>()
         return Number(context.queryKey[0]) + 42
       }
@@ -172,7 +170,7 @@ describe('useQuery', () => {
           queryFn: () => fetcher(qk[1], 'token'),
           ...options,
         }))
-      const test = useWrappedQuery([''], async () => '1')
+      const test = useWrappedQuery([''], () => Promise.resolve('1'))
       expectTypeOf(test.data).toEqualTypeOf<string | undefined>()
 
       // handles wrapped queries with custom fetcher passed directly to useQuery
@@ -190,7 +188,9 @@ describe('useQuery', () => {
           'safely'
         >,
       ) => useQuery(() => ({ queryKey: qk, queryFn: fetcher, ...options }))
-      const testFuncStyle = useWrappedFuncStyleQuery([''], async () => true)
+      const testFuncStyle = useWrappedFuncStyleQuery([''], () =>
+        Promise.resolve(true),
+      )
       expectTypeOf(testFuncStyle.data).toEqualTypeOf<boolean | undefined>()
     }
   })
@@ -1856,7 +1856,7 @@ describe('useQuery', () => {
   })
 
   // See https://github.com/tannerlinsley/react-query/issues/137
-  it('should not override initial data in dependent queries', async () => {
+  it('should not override initial data in dependent queries', () => {
     const key1 = queryKey()
     const key2 = queryKey()
 
@@ -1897,7 +1897,7 @@ describe('useQuery', () => {
     rendered.getByText('Second Status: success')
   })
 
-  it('should update query options', async () => {
+  it('should update query options', () => {
     const key = queryKey()
 
     const queryFn = async () => {
@@ -2020,7 +2020,7 @@ describe('useQuery', () => {
   })
 
   // See https://github.com/tannerlinsley/react-query/issues/144
-  it('should be in "pending" state by default', async () => {
+  it('should be in "pending" state by default', () => {
     const key = queryKey()
 
     function Page() {
@@ -3405,7 +3405,7 @@ describe('useQuery', () => {
 
       const query = useQuery<unknown, Error>(() => ({
         queryKey: key,
-        queryFn: async () => {
+        queryFn: () => {
           if (counter < 2) {
             counter++
             throw new Error('error')
@@ -3755,7 +3755,7 @@ describe('useQuery', () => {
     expect(results[2]).toMatchObject({ data: 'fetched data', isStale: false })
   })
 
-  it('should support enabled:false in query object syntax', async () => {
+  it('should support enabled:false in query object syntax', () => {
     const key = queryKey()
     const queryFn = vi.fn<(...args: Array<unknown>) => string>()
     queryFn.mockImplementation(() => 'data')
@@ -5918,7 +5918,7 @@ describe('useQuery', () => {
     const states: Array<UseQueryResult<unknown>> = []
     const error = new Error('oops')
 
-    const queryFn = async (): Promise<unknown> => {
+    const queryFn = (): Promise<unknown> => {
       throw error
     }
 
@@ -5998,7 +5998,7 @@ describe('useQuery', () => {
     function Page() {
       const state = useQuery(() => ({
         queryKey: key,
-        queryFn: async (): Promise<unknown> => {
+        queryFn: (): Promise<unknown> => {
           throw error
         },
         retry: false,
