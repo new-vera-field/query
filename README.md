@@ -32,7 +32,7 @@ Still on **React Query v2**? No problem! Check out the v2 docs here: https://git
 Still on **React Query v3**? No problem! Check out the v3 docs here: https://tanstack.com/query/v3/docs/.<br />
 Still on **React Query v4**? No problem! Check out the v4 docs here: https://tanstack.com/query/v4/docs/.
 
-## Quick Features
+
 
 - Transport/protocol/backend agnostic data fetching (REST, GraphQL, promises, whatever!)
 - Auto Caching + Refetching (stale-while-revalidate, Window Refocus, Polling/Realtime)
